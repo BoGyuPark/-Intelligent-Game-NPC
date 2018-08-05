@@ -1,0 +1,13 @@
+구현을 위한 논문
+
+1. 유전 알고리즘을 이용한 플레이어 적응형 몬스터 생성 기법 (Players Adaptive Monster Generation Technique Using Genetic Algorithm)
+  김지민, 김선정, 홍석민
+  참고 : http://koreascience.or.kr/article/ArticleFullRecord.jsp?cn=OTJBCD_2017_v18n2_43
+ 
+2. 동물의 세력 투쟁 행동을 이용한 게임 인공 지능 구현 (Implementation of NPC Artificial Intelligence Using Agonistic Behavior of Animals)
+  이명재
+  참고 : http://koreascience.or.kr/article/ArticleFullRecord.jsp?cn=DJTJBT_2014_v12n1_555
+
+어느 논문을 바탕으로 구현을 시작할지 논문을 찾아보았다.
+여러 논문 중에 나에게 흥미를 북돋아주는 두 개의 논문을 찾았다.
+두 논문을 읽고 어떤 방법으로 구현할지, 어느 부분을 수정할지, 어떻게 진행할지 등을 생각해본다.
