@@ -403,7 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1327815961}
   followTime: 0
-  offset: {x: 0, y: 0, z: 0}
+  offset: {x: 0, y: 2, z: -5}
 --- !u!1001 &818840517
 Prefab:
   m_ObjectHideFlags: 0
@@ -850,10 +850,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f393ac87d6b1ba409696f0e6c928a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 2122106394}
   movementSpeed: 5
   velocity: 0
   rb: {fileID: 1327815963}
-  anim: {fileID: 2122106394}
 --- !u!4 &1327815961
 Transform:
   m_ObjectHideFlags: 0
