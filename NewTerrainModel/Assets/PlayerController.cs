@@ -100,6 +100,8 @@ public class PlayerController : MonoBehaviour
     IEnumerator AttackRoutine()
     {
         attacking = true;
+        yield return new WaitForSeconds(0.1f);
+        anim.SetInteger("Condition", 0);
         yield return new WaitForSeconds(1);
         attacking = false;
     }
