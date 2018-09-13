@@ -609,6 +609,21 @@ Animator:
   m_PrefabParentObject: {fileID: 95223252228769224, guid: 60e1c6108d19c5c4bbcc5bceade71e70,
     type: 2}
   m_PrefabInternal: {fileID: 352228096}
+--- !u!1 &940714540 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
+  m_PrefabInternal: {fileID: 1294746396}
+--- !u!114 &940714541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 940714540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1902efd17fbf04ea291d1f9143b4d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1271063642
 GameObject:
   m_ObjectHideFlags: 0

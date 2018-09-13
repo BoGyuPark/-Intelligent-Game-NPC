@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        AnimationEvents.OnSlashAnimationHit += DealDamage;
     }
 
     // Update is called once per frame
@@ -98,15 +98,11 @@ public class PlayerController : MonoBehaviour
         anim.SetInteger("Condition", 2);
         StartCoroutine(AttackRoutine());
         StartCoroutine(AttackCooldown());
-
-
     }
 
-    IEnumerator AttackRoutine()
+    void DealDamage()
     {
-        canMove = false;
-        yield return new WaitForSeconds(0.1f);
-        anim.SetInteger("Condition", 0);
+        print("deal damage!");
         GetEnemiesInRange();
         foreach(Transform enemy in enemiesInRange)
         {
@@ -114,6 +110,13 @@ public class PlayerController : MonoBehaviour
             if (ec == null) continue;
             ec.GetHit(attackDamage);
         }
+    }
+
+    IEnumerator AttackRoutine()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(0.1f);
+        anim.SetInteger("Condition", 0);
 
         yield return new WaitForSeconds(0.65f);
         canMove = true;
