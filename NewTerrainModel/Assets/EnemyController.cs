@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : MonoBehaviour
+{
 
     public Animator anim;
     public float totalHealth;
@@ -12,19 +13,22 @@ public class EnemyController : MonoBehaviour {
     public float atkSpeed;
     public float moveSpeed;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
+        currentHealth = totalHealth;
+    }
 
     // Update is called once per frame
-    void Update() {
-        
-	}
+    void Update()
+    {
 
-    public void GetHit()
+    }
+
+    public void GetHit(float damage)
     {
         anim.SetInteger("Condition", 3);
+        currentHealth -= damage;
         StartCoroutine(RecoverFromHit());
     }
 

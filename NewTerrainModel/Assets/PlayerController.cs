@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
 
     [Header("Combat")]
+    private List<Transform> enemiesInRange = new List<Transform>();
     private bool canAttack = true;
     private bool attacking;
     public float attackDamage;
@@ -83,8 +84,8 @@ public class PlayerController : MonoBehaviour
     void SetVelocity(float dir)
     {
         //look left or right depending on the (- +) of dir
-        if (dir < 0)    transform.LookAt(transform.position + Vector3.left);
-        else if (dir > 0)   transform.LookAt(transform.position + Vector3.right);
+        if (dir < 0) transform.LookAt(transform.position + Vector3.left);
+        else if (dir > 0) transform.LookAt(transform.position + Vector3.right);
         velocity = dir;
     }
     #endregion
@@ -105,6 +106,14 @@ public class PlayerController : MonoBehaviour
         canMove = false;
         yield return new WaitForSeconds(0.1f);
         anim.SetInteger("Condition", 0);
+        GetEnemiesInRange();
+        foreach(Transform enemy in enemiesInRange)
+        {
+            EnemyController ec = enemy.GetComponent<EnemyController>();
+            if (ec == null) continue;
+            ec.GetHit(attackDamage);
+        }
+
         yield return new WaitForSeconds(0.65f);
         canMove = true;
     }
@@ -112,13 +121,19 @@ public class PlayerController : MonoBehaviour
     IEnumerator AttackCooldown()
     {
         canAttack = false;
-        yield return new WaitForSeconds(1/attackSpeed);
+        yield return new WaitForSeconds(1 / attackSpeed);
         canAttack = true;
     }
 
     void GetEnemiesInRange()
     {
-
+        foreach(Collider c in Physics.OverlapSphere((transform.position + transform.forward * 0.5f), 0.5f))
+        {
+            if (c.gameObject.CompareTag("Enemy"))
+            {
+                enemiesInRange.Add(c.transform);
+            }
+        }
     }
     #endregion 
 
