@@ -7,12 +7,17 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
 
     [Header("Movement")]
+    private bool canMove;
     public float movementSpeed;
     public float velocity;
     public Rigidbody rb;
 
     [Header("Combat")]
+    private bool canAttack = true;
     private bool attacking;
+    public float attackDamage;
+    public float attackSpeed;
+    public float attackRange;
 
     // Use this for initialization
     void Start()
@@ -57,7 +62,7 @@ public class PlayerController : MonoBehaviour
             anim.SetInteger("Condition", 0);
         }
     }
-
+    #region MOVEMENT
     void Move()
     {
         if (velocity == 0)
@@ -67,42 +72,54 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (!attacking)
+            //we can oly move if we are not attacking
+            if (canMove)
             {
                 anim.SetInteger("Condition", 1);
                 rb.MovePosition(transform.position + (Vector3.right * velocity * movementSpeed * Time.deltaTime));
-
             }
         }
     }
     void SetVelocity(float dir)
     {
-        if (dir < 0)
-        {
-            transform.LookAt(transform.position + Vector3.left);
-        }
-        else if (dir > 0)
-        {
-            transform.LookAt(transform.position + Vector3.right);
-        }
-
+        //look left or right depending on the (- +) of dir
+        if (dir < 0)    transform.LookAt(transform.position + Vector3.left);
+        else if (dir > 0)   transform.LookAt(transform.position + Vector3.right);
         velocity = dir;
     }
+    #endregion
 
+    #region COMBAT
     void Attack()
     {
-        if (attacking) return;
+        if (!canAttack) return;
         anim.SetInteger("Condition", 2);
         StartCoroutine(AttackRoutine());
+        StartCoroutine(AttackCooldown());
+
 
     }
 
     IEnumerator AttackRoutine()
     {
-        attacking = true;
+        canMove = false;
         yield return new WaitForSeconds(0.1f);
         anim.SetInteger("Condition", 0);
-        yield return new WaitForSeconds(1);
-        attacking = false;
+        yield return new WaitForSeconds(0.65f);
+        canMove = true;
     }
+
+    IEnumerator AttackCooldown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(1/attackSpeed);
+        canAttack = true;
+    }
+
+    void GetEnemiesInRange()
+    {
+
+    }
+    #endregion 
+
 }
