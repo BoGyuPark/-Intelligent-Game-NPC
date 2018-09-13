@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
 
     [Header("Movement")]
-    private bool canMove;
+    private bool canMove = true;
     public float movementSpeed;
     public float velocity;
     public Rigidbody rb;
@@ -94,6 +94,7 @@ public class PlayerController : MonoBehaviour
     void Attack()
     {
         if (!canAttack) return;
+        anim.speed = attackSpeed;
         anim.SetInteger("Condition", 2);
         StartCoroutine(AttackRoutine());
         StartCoroutine(AttackCooldown());
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour
 
     void GetEnemiesInRange()
     {
+        enemiesInRange.Clear();
         foreach(Collider c in Physics.OverlapSphere((transform.position + transform.forward * 0.5f), 0.5f))
         {
             if (c.gameObject.CompareTag("Enemy"))
