@@ -930,7 +930,7 @@ MonoBehaviour:
   targetPos: {x: 0, y: 0, z: 0}
   MoveSpeed: 5
   HitEffect: {fileID: 0}
-  DeadEffect: {fileID: 0}
+  DeadEffect: {fileID: 1563160792786044, guid: 00b78dbb486126b43b5f3d259c888db1, type: 2}
   HP: 300
 --- !u!137 &137150349470678962
 SkinnedMeshRenderer:
