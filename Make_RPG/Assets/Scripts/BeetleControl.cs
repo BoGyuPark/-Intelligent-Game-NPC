@@ -79,12 +79,11 @@ public class BeetleControl : MonoBehaviour {
 
     }
 
+    //new, PlyaerControl.cs 참고
+    void CheckState()
+    {
 
-
-
-
-
-
+    }
 
 
 }
