@@ -6,8 +6,8 @@ public class CameraControl : MonoBehaviour {
 
 
     //third view point var
-    public float distance = 15.0f;
-    public float height = 10.0f;
+    public float distance = 30.0f;
+    public float height = 15.0f;
 
     //Damping (자연스러운 카메라 이동을 위한 Damping(지연)
     public float heightDamping = 2.0f;
