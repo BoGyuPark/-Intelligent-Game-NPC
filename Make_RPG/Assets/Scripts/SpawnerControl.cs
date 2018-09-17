@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnerControl : MonoBehaviour {
 
     //몬스터를 소환할 시간 간격을 저장할 변수
-    public float SpawnTime = 30.0f;
+    public float SpawnTime = 50.0f;
     //마지막으로 소환한 시간을 저장할 변수
     float LastSpawnTime;
     public GameObject monster;
