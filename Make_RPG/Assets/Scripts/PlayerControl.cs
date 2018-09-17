@@ -41,6 +41,9 @@ public class PlayerControl : MonoBehaviour
         animation[attackAnim.name].wrapMode = WrapMode.Once;
         animation[attackAnim.name].layer = 1;
 
+        animation[skillAnim.name].wrapMode = WrapMode.Once;
+        animation[skillAnim.name].layer = 1;
+
     }
 
     // Update is called once per frame
@@ -97,6 +100,12 @@ public class PlayerControl : MonoBehaviour
         {
             state = CharacterState.ATTACK;
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            state = CharacterState.SKILL;
+        }
+
     }
 
     void AnimationControl()
@@ -118,6 +127,17 @@ public class PlayerControl : MonoBehaviour
                 else
                 {
                     animation.CrossFade(attackAnim.name);
+                }
+                break;
+            case CharacterState.SKILL:
+                if (animation[skillAnim.name].normalizedTime > 0.9f)
+                {
+                    animation[skillAnim.name].normalizedTime = 0.0f;
+                    state = CharacterState.IDLE;
+                }
+                else
+                {
+                    animation.CrossFade(skillAnim.name);
                 }
                 break;
 
