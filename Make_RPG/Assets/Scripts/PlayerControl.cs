@@ -12,6 +12,7 @@ public class PlayerControl : MonoBehaviour
 
     private CharacterController charactercontroller;
     private Animation animation;
+
     private Vector3 MoveDirection = Vector3.zero;
     private CollisionFlags collisionflags;
 
@@ -62,8 +63,10 @@ public class PlayerControl : MonoBehaviour
 
         Vector3 forward = cameraTransform.TransformDirection(Vector3.forward);
         forward = forward.normalized; // 벡터의 정규화
+        //좌우를 위한 벡터
         Vector3 right = new Vector3(forward.z, 0.0f, -forward.x);
 
+        //키보드 방향키
         float v = Input.GetAxisRaw("Vertical");
         float h = Input.GetAxisRaw("Horizontal");
 
@@ -82,8 +85,10 @@ public class PlayerControl : MonoBehaviour
 
     void CheckState()
     {
-        if (state == CharacterState.ATTACK)
+        if (state == CharacterState.ATTACK || state == CharacterState.SKILL)
+        {
             return;
+        }
 
         if (charactercontroller.velocity.sqrMagnitude > 0.1f)
         {
@@ -96,11 +101,11 @@ public class PlayerControl : MonoBehaviour
             state = CharacterState.IDLE;
         }
 
-        if(Input.GetMouseButtonDown(0))     // 0: left, 1:  right, 2: wheel
+        // 0: left, 1:  right, 2: wheel
+        if (Input.GetMouseButtonDown(0))     
         {
             state = CharacterState.ATTACK;
         }
-
         if (Input.GetMouseButtonDown(1))
         {
             state = CharacterState.SKILL;
