@@ -332,7 +332,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4544955684965630, guid: b83a0766685fd6149b1d48d2c2aa65ea, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 6.42
+      value: 12.69
       objectReference: {fileID: 0}
     - target: {fileID: 4544955684965630, guid: b83a0766685fd6149b1d48d2c2aa65ea, type: 2}
       propertyPath: m_LocalPosition.y
@@ -828,7 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42181ee3dbe5a543859a70c0f0aa5dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnTime: 5
+  SpawnTime: 3
   monster: {fileID: 1220494554634566, guid: b83a0766685fd6149b1d48d2c2aa65ea, type: 2}
 --- !u!4 &1938169464
 Transform:
