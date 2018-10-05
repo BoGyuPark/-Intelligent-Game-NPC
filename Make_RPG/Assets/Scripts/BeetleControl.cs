@@ -49,6 +49,9 @@ public class BeetleControl : MonoBehaviour {
         transform.Translate(diffPos * Time.deltaTime * MoveSpeed, Space.World);
 
         transform.LookAt(targetPos);
+
+        //공격 및 다른 state 추가
+
 	}
 
     void SearchTarget()
