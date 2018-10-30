@@ -508,6 +508,10 @@ Prefab:
       propertyPath: m_Animations.Array.data[9]
       value: 
       objectReference: {fileID: 7400000, guid: b7753858688da46728b20f4d84fb01d1, type: 3}
+    - target: {fileID: 100094, guid: 756467ac0ec02084aafaff0502b9248d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 756467ac0ec02084aafaff0502b9248d, type: 3}
   m_IsPrefabAsset: 0
