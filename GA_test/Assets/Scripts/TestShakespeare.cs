@@ -15,10 +15,12 @@ public class TestShakespeare : MonoBehaviour
 
     [Header("Other")]
     [SerializeField] int numCharsPerText = 15000;
+
     [SerializeField] Text targetText;
     [SerializeField] Text bestText;
     [SerializeField] Text bestFitnessText;
     [SerializeField] Text numGenerationsText;
+
     [SerializeField] Transform populationTextParent;
     [SerializeField] Text textPrefab;
 
@@ -35,28 +37,37 @@ public class TestShakespeare : MonoBehaviour
             this.enabled = false;
         }
 
+        //초기화
         random = new System.Random();
+        //GA는 char형으로, dnasize는 targetString.Length로, Func<T> getRandomGene은 GetRandomCharacter함수로
+        //FitnessFunction 함수로 적합도 계산
         ga = new GeneticAlgorithm<char>(populationSize, targetString.Length, random, GetRandomCharacter, FitnessFunction, elitism, mutationRate);
     }
 
+    //스크립트가 켜져 있을 때(enabled 상태일 때) 매 프레임마다 호출
     void Update()
     {
         ga.NewGeneration();
 
         UpdateText(ga.BestGenes, ga.BestFitness, ga.Generation, ga.Population.Count, (j) => ga.Population[j].Genes);
 
+        //모든 문자를 맞췄을 경우
         if (ga.BestFitness == 1)
         {
             this.enabled = false;
         }
     }
 
+    //랜덤 문자(유전자) 반환
     private char GetRandomCharacter()
     {
+        //유효 문자 길이의 숫자 중 랜덤 값 (0 ~ len -1 값까지)
         int i = random.Next(validCharacters.Length);
+        //인덱스에 해당하는 값의 문자 반환
         return validCharacters[i];
     }
 
+    //적합도 함수 계산
     private float FitnessFunction(int index)
     {
         float score = 0;
@@ -64,35 +75,30 @@ public class TestShakespeare : MonoBehaviour
 
         for (int i = 0; i < dna.Genes.Length; i++)
         {
+            //문자를 맞춘 갯수만큼 score 1증가.
             if (dna.Genes[i] == targetString[i])
             {
                 score += 1;
             }
         }
-
+        //퍼센트 비율로 환산
         score /= targetString.Length;
 
+        //????????????????????이 값은 잘모르겠음
         score = (Mathf.Pow(2, score) - 1) / (2 - 1);
 
         return score;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     private int numCharsPerTextObj;
     private List<Text> textList = new List<Text>();
 
+
+    //Awake 함수는 언제나 Start 함수 전에 호출됩니다
+    //Awake 함수는 스크립트 객체가 로딩될 때 호출됩니다.
+    //Awake 함수는 게임이 시작하기 전에 변수나 게임 상태를 초기화하기 위해 사용합니다.
+    //Awake 함수는 스크립트 객체의 라이프타임 동안 단 한번만 호출됩니다.
     void Awake()
     {
         numCharsPerTextObj = numCharsPerText / validCharacters.Length;
@@ -113,6 +119,8 @@ public class TestShakespeare : MonoBehaviour
 
         numGenerationsText.text = generation.ToString();
 
+
+        // 오른쪽화면에 bestGene을 제외한 나머지 DNA들의 값을 보여준다.
         for (int i = 0; i < textList.Count; i++)
         {
             var sb = new StringBuilder();
