@@ -137,22 +137,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 43114516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79af3687b20951a4d90c390755d69542, type: 3}
+  m_Script: {fileID: 11500000, guid: cb5c4c664b46b804e97a239df4cd53cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetString: To be, or not to be
+  targetString: To Stay
   validCharacters: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.|!#$%&/()=? '
-  populationSize: 200
-  mutationRate: 0.01
-  elitism: 5
+  populationSize: 100
+  mutationRate: 0.015
+  elitism: 50
   numCharsPerText: 15000
   targetText: {fileID: 221927274}
   bestText: {fileID: 1777861858}
   bestFitnessText: {fileID: 1748202051}
   numGenerationsText: {fileID: 485051188}
   populationTextParent: {fileID: 1969127884}
-  textPrefab: {fileID: 114976746338336432, guid: cbbb134eeef49804ea8ee1e41d50d2a1,
-    type: 2}
+  textPrefab: {fileID: 1777861858}
 --- !u!4 &43114518
 Transform:
   m_ObjectHideFlags: 0
@@ -1224,7 +1223,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0000076293945, y: -0.000038027763}
+  m_AnchoredPosition: {x: 0.000022888184, y: 0.000038266182}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1969127885
@@ -1407,7 +1406,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1437423100}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
