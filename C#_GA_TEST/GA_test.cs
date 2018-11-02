@@ -15,10 +15,13 @@ public class GeneticAlgorithm<T>
     //적합성 함수 중에 가장 높은 적합도를 갖는 염색체의 유전자 배열 
     public T[] BestGenes { get; private set; }
 
-    //
+    //임계치 설정
     public int Elitism;
     //돌연변이확률
     public float MutationRate;
+
+    //몬스터 갯수
+    public int[] monsterCount;
 
     //새로운 세대의 population
     private List<DNA<T>> newPopulation;
@@ -57,6 +60,9 @@ public class GeneticAlgorithm<T>
     //새로운 세대를 생성한다.
     public void NewGeneration(int numNewDNA = 0, bool crossoverNewDNA = false)
     {
+        //몬스터의 갯수를 초기화
+        monsterCount = new int[60];
+
         // .Count : 현재 사용중인 리스트 내부의 요소 개수
         int finalCount = Population.Count + numNewDNA;
 
@@ -72,6 +78,7 @@ public class GeneticAlgorithm<T>
             CalculateFitness();
             //Population에 있는 DNA 오름차순 정렬
             Population.Sort(CompareDNA);
+
         }
         // newPopulation 리스트 내부의 요소를 모두 지운다.
         newPopulation.Clear();
@@ -97,11 +104,11 @@ public class GeneticAlgorithm<T>
                 //새로운 세대에 자식 DNA 삽입
                 newPopulation.Add(child);
             }
-            ////대치 : 새로운 DNA를 새로운 세대에 삽입 (가장 품질이 낮은 해를 대치)
-            //else
-            //{
-            //    newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
-            //}
+            //대치 : 새로운 DNA를 새로운 세대에 삽입 (가장 품질이 낮은 해를 대치), player가 죽은 경우
+            else
+            {
+                newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
+            }
         }
 
         //swap 한다.
