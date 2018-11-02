@@ -28,12 +28,12 @@ public class Program
         public double Php;
         public double Parmor;
         public double Pdps;
-
     }
 
     int populationSize = 100;
     float mutationRate = 0.015f;
     int elitism = 50;
+    int dnaSize = 8;
 
     private GeneticAlgorithm<int> ga;
     private System.Random random;
@@ -119,32 +119,43 @@ public class Program
         random = new System.Random();
         //GA는 char형으로, dnasize는 targetString.Length로, Func<T> getRandomGene은 GetRandomCharacter함수로
         //FitnessFunction 함수로 적합도 계산
-        ga = new GeneticAlgorithm<int>(populationSize, 8, random, GetRandomMonster, FitnessFunction, elitism, mutationRate);
+        ga = new GeneticAlgorithm<int>(populationSize, dnaSize, random, GetRandomMonster, FitnessFunction, elitism, mutationRate);
 
+        
 
         while (true)
         {
-            Console.Write("Generation :");
-            Console.WriteLine(ga.Generation);
             Console.WriteLine();
+            Console.WriteLine("Generation :" + ga.Generation);
 
             ga.NewGeneration();
+            //남은 hp가 원래 hp체력의 1/10이하 인 경우 목표에 만족하게 된다.
             if (ga.BestFitness < player.Php * 0.1)
             {
-                Console.Write(ga.Generation);
-                Console.WriteLine(" Generation The End");
-                Console.Write("HP : ");
-                Console.Write(ga.BestFitness);
+                Console.WriteLine();
+                Console.WriteLine("DNA size : " + dnaSize);
+                Console.WriteLine(ga.Generation - 1 + " Generation The End");
+                Console.WriteLine("HP After Battle : "  + ga.BestFitness);
+                Console.Write("Genes of Best Dungeon : ");
+                for (int i = 0; i < dnaSize; i++)
+                {
+                    Console.Write(ga.BestGenes[i] + " ");
+                    //Console.Write(Mlist[(ga.BestGenes[i])].Mname);
+                }
+                Console.WriteLine();
+                Console.WriteLine("The number of Monster ");
+                for (int j = 0; j < 60; j++)
+                {
+                    Console.WriteLine(j + "= " + ga.monsterCount[j] + "  ");
+                }
+                Console.WriteLine();
+
                 break;
             }
-        }
-        //int a = 3;
 
-        //while (a > 0) 
-        //{
-        //    ga.NewGeneration();
-        //    a -= 1;
-        //}
+        }
+
+        Console.WriteLine();
 
     }
 
@@ -167,20 +178,22 @@ public class Program
         player = new PlayerInfo();
         player.Php = 3000;
         player.Parmor = 0.8;
-        player.Pdps = 250;
+        player.Pdps = 205;
 
-        Console.Write(index);
-        Console.Write(" dungeon  : ");
+        double originalPlayerHP = player.Php;
 
-        //여기부터 수정
+        Console.Write(index + " dungeon  : ");
+
         for (int i = 0; i < dna.Genes.Length; i++)
         {
             //dna에서 i번째에 있는 몬스터 정보(n)를 가져온다.
             int n = dna.Genes[i];
-            MonsterInfo mon = Mlist[n];
 
-            Console.Write(mon.Mnum);
-            Console.Write(" ");
+            //해당몬스터 갯수 증가
+            ga.monsterCount[n]++;
+
+            MonsterInfo mon = Mlist[n];
+            Console.Write(mon.Mnum + " ");
 
             while (player.Php > 0)
             {
@@ -189,19 +202,17 @@ public class Program
                     break;
                 player.Php -= mon.Mdps * (1 - player.Parmor);
 
+                //플레이어가 죽은 경우, 남은 hp가 음수 이므로 원래 player의 HP의 2배 값과 더하여 우선순위를 뒤로 미룬다.
                 if (player.Php <= 0)
                 {
-                    Console.WriteLine(player.Php);
-                    Console.WriteLine(ga.Generation);
-                    Console.WriteLine("player Die");
-                    break;
+                    Console.WriteLine("player die");
+                    return (originalPlayerHP * 2) + player.Php;
                 }
             }
         }
         Console.WriteLine();
         //플레이어의 남은 체력
         score = player.Php;
-
         return score;
     }
 
