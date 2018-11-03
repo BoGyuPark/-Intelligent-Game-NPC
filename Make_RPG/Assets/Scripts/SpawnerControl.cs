@@ -8,8 +8,8 @@ public class SpawnerControl : MonoBehaviour {
     public float SpawnTime = 50.0f;
     //마지막으로 소환한 시간을 저장할 변수
     float LastSpawnTime;
-    public GameObject monster;
-
+    public GameObject[] monster;
+    int randomNum;
 	// Use this for initialization
 	void Start () {
         // Time.time : 현재 시간
@@ -22,8 +22,9 @@ public class SpawnerControl : MonoBehaviour {
         {
             LastSpawnTime = Time.time;
             Vector3 pos = new Vector3(transform.position.x + Random.Range(-50.0f, 50.0f), transform.position.y, +transform.position.z + Random.Range(-50.0f, 50.0f));
-
-            Instantiate(monster, pos, transform.rotation);
+            // 0 ~ 59 중에 랜덤 range 0, 60
+            randomNum = Random.Range(0, 60);
+            Instantiate(monster[randomNum], pos, transform.rotation);
         }
 	}
 }
