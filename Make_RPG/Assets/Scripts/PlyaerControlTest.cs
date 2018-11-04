@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlyaerControlTest : MonoBehaviour
 {
+    public Vector3 targetMonsterPos = Vector3.zero;
+
 
     public float MoveSpeed = 10.0f;
     public float RotateSpeed = 500.0f;
@@ -50,11 +52,36 @@ public class PlyaerControlTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        CheckState();
-        AnimationControl();
-        BodyDirection();
-        ApplyGravity();
+        SearchTarget();
+
+        Vector3 currentPos = transform.position;
+        Vector3 diffPos = targetMonsterPos - currentPos;
+
+        if (diffPos.magnitude < 4.0f)
+        {
+            return;
+        }
+
+        diffPos = diffPos.normalized;
+
+        transform.Translate(diffPos * Time.deltaTime * MoveSpeed, Space.World);
+
+        //움직이는 방향을 바라보도록 LookAt함수
+        transform.LookAt(targetMonsterPos);
+
+        //Move();
+        //CheckState();
+        //AnimationControl();
+        //BodyDirection();
+        //ApplyGravity();
+
+    }
+
+    void SearchTarget()
+    {
+        GameObject target = GameObject.FindWithTag("Monster");
+        targetMonsterPos = target.transform.position;
+
     }
 
     void Move()
@@ -106,6 +133,7 @@ public class PlyaerControlTest : MonoBehaviour
         {
             state = CharacterState.ATTACK;
         }
+
         if (Input.GetMouseButtonDown(1))
         {
             state = CharacterState.SKILL;

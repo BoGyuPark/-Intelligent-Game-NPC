@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeetleControl : MonoBehaviour {
+public class AcolyteControl : MonoBehaviour {
 
     public Vector3 targetPos = Vector3.zero;
     public float MoveSpeed = 5.0f;
     public GameObject HitEffect;
     public GameObject DeadEffect;
-    public int HP = 300;
+    public double HP;
+    public double ARMOR;
+    public double DPS;
+    public static bool flagnum = false;
     private Animation animation;
 
-
-    public enum BeetleState
+    public enum AcolyteState
     {
         IDLE = 0,
         WALK = 1,
@@ -21,24 +23,26 @@ public class BeetleControl : MonoBehaviour {
         SIZE
     }
 
-    private BeetleState state = BeetleState.IDLE;
+    private AcolyteState state = AcolyteState.IDLE;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         animation = GetComponent<Animation>();
         animation.wrapMode = WrapMode.Loop;
-        animation.Play("move");
-        HP = 300;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        animation.Play("run");
+        //HP = 300;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         SearchTarget();
 
         Vector3 currentPos = transform.position;
         Vector3 diffPos = targetPos - currentPos;
 
-        if(diffPos.magnitude < 4.0f)
+        if (diffPos.magnitude < 4.0f)
         {
             return;
         }
@@ -51,8 +55,11 @@ public class BeetleControl : MonoBehaviour {
         transform.LookAt(targetPos);
 
         //공격 및 다른 state 추가
+        
+       
 
-	}
+    }
+
 
     void SearchTarget()
     {
@@ -61,20 +68,32 @@ public class BeetleControl : MonoBehaviour {
 
     }
 
-    //sword라는 태그를 가진 오브젝트가 몬스터의 박스 충돌체에 충돌한다면 손스터의 상태를 HIT이라는 상태로 바꾸고 HitEffect를 생성해(instantiate)준다.
+    //sword라는 태그를 가진 오브젝트가 몬스터의 박스 충돌체에 충돌한다면 몬스터의 상태를 HIT이라는 상태로 바꾸고 HitEffect를 생성해(instantiate)준다.
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "sword")
+        if (other.gameObject.tag == "sword")
         {
             Debug.Log("sword");
-            state = BeetleState.HIT;
+            state = AcolyteState.HIT;
             Instantiate(HitEffect, other.transform.position, transform.rotation);
             //10~50 랜덤 데미지
-            CheckDead(Random.Range(10,50));
+            //CheckDead(Random.Range(10, 50));
+            CheckDead(34);
             Debug.Log("HITTED");
+
+            PlayerControl.attackFlag = false;
+            if (PlayerControl.attackFlag == false)
+            {
+                animation.Play("attack1");
+                PlayerControl.attackFlag = true;
+                //여기가 정상작동 안함
+                Debug.Log("flag change");
+            }
+            //animation.Play("idle");
+
         }
     }
-    
+
     //몬스터가 받은 데미지를 계산하여 HP가 0보다 작거나 같다면 죽는 이펙트를 생성하고 몬스터를 삭제
     void CheckDead(int damage)
     {
@@ -87,8 +106,19 @@ public class BeetleControl : MonoBehaviour {
         if (HP <= 0)
         {
             Instantiate(DeadEffect, transform.position, transform.rotation);
+            //gameObject.SetActive(false);
             Destroy(gameObject);
+            //flagnum = true면 게임오브젝트가 죽었다는 뜻
+            flagnum = true;
         }
     }
 
+    public void SetParameter(double hp, double armor, double dps)
+    {
+        this.HP = hp;
+        this.ARMOR = armor;
+        this.DPS = dps;
+    }
+
 }
+

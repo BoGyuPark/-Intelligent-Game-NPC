@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-
+    public Vector3 targetMonsterPos = Vector3.zero;
+    public static bool attackFlag = true;
+    
     public float MoveSpeed = 10.0f;
     public float RotateSpeed = 500.0f;
     public float VerticalSpeed = 0.0f;
@@ -26,9 +28,11 @@ public class PlayerControl : MonoBehaviour
         WALK = 1,
         ATTACK = 2,
         SKILL = 3,
+        HIT = 4,
         SIZE
     }
     private CharacterState state = CharacterState.IDLE;
+
 
     // Use this for initialization
     void Start()
@@ -45,16 +49,48 @@ public class PlayerControl : MonoBehaviour
         animation[skillAnim.name].wrapMode = WrapMode.Once;
         animation[skillAnim.name].layer = 1;
 
+        attackFlag = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        SearchTarget();
+
+        Vector3 currentPos = transform.position;
+        Vector3 diffPos = targetMonsterPos - currentPos;
+        //움직이는 방향을 바라보도록 LookAt함수
+        transform.LookAt(targetMonsterPos);
+
+        //공격 범위 안에 들어왔을 경우
+        if (diffPos.magnitude < 4.0f && attackFlag == true)
+        {
+            //Debug.Log("access");
+            if (attackFlag == true)
+            {
+                state = CharacterState.ATTACK;
+                //AnimationControl();
+                //attackFlag = false;
+            }
+            else
+            {
+                Debug.Log("no");
+            }
+            
+        }
+
         Move();
-        CheckState();
+        //CheckState();
         AnimationControl();
         BodyDirection();
         ApplyGravity();
+    }
+
+    void SearchTarget()
+    {
+        GameObject target = GameObject.FindWithTag("Monster");
+        targetMonsterPos = target.transform.position;
+
     }
 
     void Move()
@@ -100,7 +136,7 @@ public class PlayerControl : MonoBehaviour
             //stand
             state = CharacterState.IDLE;
         }
-
+        //공격
         // 0: left, 1:  right, 2: wheel
         if (Input.GetMouseButtonDown(0))     
         {
