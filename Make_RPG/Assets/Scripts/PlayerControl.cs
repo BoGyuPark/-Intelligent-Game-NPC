@@ -11,6 +11,13 @@ public class PlayerControl : MonoBehaviour
     public float RotateSpeed = 500.0f;
     public float VerticalSpeed = 0.0f;
     private float gravity = 9.8f;
+    public double PlayerHp;
+    public double PlayerArmor;
+    public double PlayerDps;
+
+    public static double HP = 3000;
+    public static double ARMOR = 0.8;
+    public static double DPS = 205;
 
     private CharacterController charactercontroller;
     private Animation animation;
@@ -22,6 +29,7 @@ public class PlayerControl : MonoBehaviour
     public AnimationClip walkAnim;
     public AnimationClip attackAnim;
     public AnimationClip skillAnim;
+
     public enum CharacterState
     {
         IDLE = 0,
@@ -50,6 +58,9 @@ public class PlayerControl : MonoBehaviour
         animation[skillAnim.name].layer = 1;
 
         attackFlag = true;
+        PlayerHp = HP;
+        PlayerArmor = ARMOR;
+        PlayerDps = DPS;
     }
 
     // Update is called once per frame
@@ -71,12 +82,9 @@ public class PlayerControl : MonoBehaviour
                 state = CharacterState.ATTACK;
                 //AnimationControl();
                 //attackFlag = false;
+                PlayerHp = HP;
             }
-            else
-            {
-                Debug.Log("no");
-            }
-            
+                        
         }
 
         Move();
@@ -181,6 +189,7 @@ public class PlayerControl : MonoBehaviour
                     animation.CrossFade(skillAnim.name);
                 }
                 break;
+           
 
         }
     }

@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 65256072075002950}
   - component: {fileID: 114631685237872400}
   m_Layer: 0
-  m_Name: 0
+  m_Name: Spirit Walker
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2089,7 +2089,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 2, z: 1.2}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!111 &111435471590741046
 Animation:
@@ -2126,9 +2126,10 @@ MonoBehaviour:
   MoveSpeed: 5
   HitEffect: {fileID: 1861397764005678, guid: 1b5f39528b689c54a8514d57851e5d74, type: 2}
   DeadEffect: {fileID: 1325401306197388, guid: 00b78dbb486126b43b5f3d259c888db1, type: 2}
-  HP: 340
+  MonsterName: Spirit Walker
+  HP: 620
   ARMOR: 0
-  DPS: 23.75
+  DPS: 34.13
 --- !u!137 &137945173608783400
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
