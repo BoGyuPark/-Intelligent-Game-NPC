@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BeetleControl : MonoBehaviour {
 
-
     public Vector3 targetPos = Vector3.zero;
     public float MoveSpeed = 5.0f;
     public GameObject HitEffect;
@@ -48,6 +47,7 @@ public class BeetleControl : MonoBehaviour {
 
         transform.Translate(diffPos * Time.deltaTime * MoveSpeed, Space.World);
 
+        //움직이는 방향을 바라보도록 LookAt함수
         transform.LookAt(targetPos);
 
         //공격 및 다른 state 추가
@@ -61,6 +61,7 @@ public class BeetleControl : MonoBehaviour {
 
     }
 
+    //sword라는 태그를 가진 오브젝트가 몬스터의 박스 충돌체에 충돌한다면 손스터의 상태를 HIT이라는 상태로 바꾸고 HitEffect를 생성해(instantiate)준다.
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "sword")
@@ -73,7 +74,8 @@ public class BeetleControl : MonoBehaviour {
             Debug.Log("HITTED");
         }
     }
-
+    
+    //몬스터가 받은 데미지를 계산하여 HP가 0보다 작거나 같다면 죽는 이펙트를 생성하고 몬스터를 삭제
     void CheckDead(int damage)
     {
         GameObject dmgObj = Instantiate(Resources.Load("Prefabs/DamageText"), Vector3.zero, Quaternion.identity) as GameObject;

@@ -1,19 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class SpawnerControl : MonoBehaviour {
-
-    public GameObject monster;
-    int randomNum;
-    public string InputMonName;
-    public double InputMonHp;
-    public double InputMonArmor;
-    public double InputMonDps;
-
-    public static int NumOfMon;
-    public static bool numCheck = false;
-
+public class Program
+{
     //Monster 구조체 선언
     public struct MonsterInfo
     {
@@ -32,18 +21,26 @@ public class SpawnerControl : MonoBehaviour {
             this.Mdps = Mdps;
         }
     }
-    public List<MonsterInfo> Mlist;
 
-    int populationSize = 4;
+    //Player 구조체 선언
+    public struct PlayerInfo
+    {
+        public double Php;
+        public double Parmor;
+        public double Pdps;
+    }
+
+    int populationSize = 100;
     float mutationRate = 0.015f;
-    int elitism = 2;
-    public static int dnaSize = 4;
+    int elitism = 50;
+    int dnaSize = 8;
 
     private GeneticAlgorithm<int> ga;
     private System.Random random;
-
-    public SpawnerControl()
-    {
+    public List<MonsterInfo> Mlist;
+    public PlayerInfo player;
+    public Program()
+    {      
         //<------------------------------몬스터 정보---------------------------------------->
         {
             //Monster list 생성
@@ -116,148 +113,51 @@ public class SpawnerControl : MonoBehaviour {
             Mlist.Add(new MonsterInfo(58, "Phoenix", 1250, 0.01, 95.20));
             Mlist.Add(new MonsterInfo(59, "Infernal", 1500, 0.06, 73.58));
         }
+
+
         //초기화
         random = new System.Random();
         //GA는 char형으로, dnasize는 targetString.Length로, Func<T> getRandomGene은 GetRandomCharacter함수로
         //FitnessFunction 함수로 적합도 계산
         ga = new GeneticAlgorithm<int>(populationSize, dnaSize, random, GetRandomMonster, FitnessFunction, elitism, mutationRate);
-        
-
-    }
-
-    // Use this for initialization
-    void Start () {
-
-        Vector3 pos = new Vector3(transform.position.x + Random.Range(-15.0f, 15.0f), transform.position.y, +transform.position.z + Random.Range(-15.0f, 15.0f));
-        // 첫 세대의 첫번째 던전의 첫번째 몬스터의 번호
-        randomNum = ga.Population[0].Genes[0];
-        //Instantiate(monster[randomNum], pos, transform.rotation);
-        //monster[0].GetComponent<MonstersControl>().SetParameter("Acolyte", 220, 0, 23.75);
-
-        //MonsterInfo mon = Mlist[randomNum];
-        MonsterInfo mon = Mlist[randomNum];
-        InputMonName = mon.Mname;
-        InputMonHp = mon.Mhp;
-        InputMonArmor = mon.Marmor;
-        InputMonDps = mon.Mdps;
-        monster.GetComponent<MonstersControl>().SetParameter(InputMonName, InputMonHp, InputMonArmor, InputMonDps);
-
-        //Debug.Log("start monster num : " + randomNum);
-        Instantiate(monster, pos, transform.rotation);
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    for (int j = 0; j < 4; j++)
-        //    {
-        //        Debug.Log(i + "번째 던전" + ga.Population[i].Genes[j]);
-        //    }
-        //}
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-
-        //남은 hp가 원래 hp체력의 1 / 10이하 인 경우 목표에 만족하게 된다.
-        if (ga.BestFitness < PlayerControl.HP * 0.1)
-        {
-            //종료
-            Application.Quit();
-            //Console.WriteLine();
-            //Console.WriteLine("DNA size : " + dnaSize);
-            //Console.WriteLine(ga.Generation - 1 + " Generation The End");
-            //Console.WriteLine("HP After Battle : " + ga.BestFitness);
-            //Console.Write("Genes of Best Dungeon : ");
-            //for (int i = 0; i < dnaSize; i++)
-            //{
-            //    //Console.Write(ga.BestGenes[i] + " ");
-            //    //Console.Write(Mlist[(ga.BestGenes[i])].Mname);
-            //}
-            //Console.WriteLine();
-            //Console.WriteLine("The number of Monster ");
-            //for (int j = 0; j < 60; j++)
-            //{
-            //    Console.WriteLine(j + "= " + ga.monsterCount[j] + "  ");
-            //}
-            //Console.WriteLine();
-
-            //break;
-        }
-
-        //하나의 DNA에 있는 모든 몬스터와 전투를 함
-        //이 때 fitness 계산을 해야한다.
-        if (NumOfMon != 0 && NumOfMon % dnaSize == 0 && numCheck == true)
-        {
-            if(MonstersControl.deadHp < 0)
-            {
-                ga.Population[(NumOfMon / dnaSize) - 1].Fitness = MonstersControl.deadHp + 3000 * 10;
-            }
-            else
-            {
-                ga.Population[(NumOfMon / dnaSize) - 1].Fitness = PlayerControl.HP;
-            }
-            ga.fitnessSum += PlayerControl.HP;
-            numCheck = false;
-
-            Debug.Log(ga.Generation + "세대의 " + ((NumOfMon / dnaSize) - 1) + "번째 던전의 적합도수치" + ga.Population[(NumOfMon / dnaSize) - 1].Fitness);
-            //한 던전이 끝났으므로 HP 리셋
-            PlayerControl.HP = 3000;
-
-            //모든 던전이 전투 종료시
-            if (NumOfMon / dnaSize == ga.Population.Count)
-            {
-                ga.NewGeneration();
-                Debug.Log(ga.Generation + "generation");
-                //1. 남은 체력순으로 sort
-                //2. newPopulation.Clear()
-                //3. Elitism 기준으로 새로운 세대에 삽입 나머진 DNA 교배 및 변이로 삽입
-                //4. swap
-
-                //초기화
-                NumOfMon = 0;
-                ga.fitnessSum = 0;
-
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    for (int j = 0; j < 4; j++)
-                //    {
-                //        Debug.Log(i + "번째 던전" + ga.Population[i].Genes[j]);
-                //    }
-                //}
-
-
-            }
-
-        }
 
         
-        //몬스터 생성
-        if (MonstersControl.flagnum == true)
+
+        while (true)
         {
-            Vector3 pos = new Vector3(transform.position.x + Random.Range(-15.0f, 15.0f), transform.position.y, +transform.position.z + Random.Range(-15.0f, 15.0f));
-            //각 던전의 몬스터
+            Console.WriteLine();
+            Console.WriteLine("Generation :" + ga.Generation);
 
-            randomNum = ga.Population[NumOfMon / dnaSize].Genes[NumOfMon % dnaSize];
-            //Instantiate(monster[randomNum], pos, transform.rotation);
-            //monster[0].GetComponent<MonstersControl>().SetParameter("Acolyte", 220, 0, 23.75);
+            ga.NewGeneration();
+            //남은 hp가 원래 hp체력의 1/10이하 인 경우 목표에 만족하게 된다.
+            if (ga.BestFitness < player.Php * 0.1)
+            {
+                Console.WriteLine();
+                Console.WriteLine("DNA size : " + dnaSize);
+                Console.WriteLine(ga.Generation - 1 + " Generation The End");
+                Console.WriteLine("HP After Battle : "  + ga.BestFitness);
+                Console.Write("Genes of Best Dungeon : ");
+                for (int i = 0; i < dnaSize; i++)
+                {
+                    Console.Write(ga.BestGenes[i] + " ");
+                    //Console.Write(Mlist[(ga.BestGenes[i])].Mname);
+                }
+                Console.WriteLine();
+                Console.WriteLine("The number of Monster ");
+                for (int j = 0; j < 60; j++)
+                {
+                    Console.WriteLine(j + "= " + ga.monsterCount[j] + "  ");
+                }
+                Console.WriteLine();
 
-            //MonsterInfo mon = Mlist[randomNum];
-            MonsterInfo mon = Mlist[randomNum];
-            InputMonName = mon.Mname;
-            InputMonHp = mon.Mhp;
-            InputMonArmor = mon.Marmor;
-            InputMonDps = mon.Mdps;
-            monster.GetComponent<MonstersControl>().SetParameter(InputMonName, InputMonHp, InputMonArmor, InputMonDps);
+                break;
+            }
 
-            //Debug.Log("new monster num : " + randomNum);
-            Instantiate(monster, pos, transform.rotation);
-
-            MonstersControl.flagnum = false;
         }
 
-    }
+        Console.WriteLine();
 
+    }
 
     //랜덤 문자(유전자) 반환
     private int GetRandomMonster()
@@ -275,13 +175,14 @@ public class SpawnerControl : MonoBehaviour {
         DNA<int> dna = ga.Population[index];
 
         //<----------------------플레이어 정보------------------------------------>
-        PlayerControl.HP = 3000;
-        PlayerControl.ARMOR = 0.8;
-        PlayerControl.DPS = 205;
+        player = new PlayerInfo();
+        player.Php = 3000;
+        player.Parmor = 0.8;
+        player.Pdps = 205;
 
-        double originalPlayerHP = PlayerControl.HP;
+        double originalPlayerHP = player.Php;
 
-        //Console.Write(index + " dungeon  : ");
+        Console.Write(index + " dungeon  : ");
 
         for (int i = 0; i < dna.Genes.Length; i++)
         {
@@ -292,37 +193,29 @@ public class SpawnerControl : MonoBehaviour {
             ga.monsterCount[n]++;
 
             MonsterInfo mon = Mlist[n];
-            //Console.Write(mon.Mnum + " ");
+            Console.Write(mon.Mnum + " ");
 
-            
+            while (player.Php > 0)
+            {
+                mon.Mhp -= player.Pdps * (1 - mon.Marmor);
+                if (mon.Mhp <= 0)
+                    break;
+                player.Php -= mon.Mdps * (1 - player.Parmor);
 
-            
-            //몬스터를 생성했으니까 Player와 전투를 해야한다.
-
-
-            //while (PlayerControl.HP > 0)
-            //{
-            //    mon.Mhp -= PlayerControl.DPS * (1 - mon.Marmor);
-            //    if (mon.Mhp <= 0)
-            //        break;
-            //    PlayerControl.HP -= mon.Mdps * (1 - PlayerControl.ARMOR);
-
-            //    //플레이어가 죽은 경우, 남은 hp가 음수 이므로 원래 player의 HP의 2배 값과 더하여 우선순위를 뒤로 미룬다.
-            //    if (PlayerControl.HP <= 0)
-            //    {
-            //       // Console.WriteLine("player die");
-            //        return (originalPlayerHP * 2) + PlayerControl.HP;
-            //    }
-            //}
-
-
-
+                //플레이어가 죽은 경우, 남은 hp가 음수 이므로 원래 player의 HP의 2배 값과 더하여 우선순위를 뒤로 미룬다.
+                if (player.Php <= 0)
+                {
+                    Console.WriteLine("player die");
+                    return (originalPlayerHP * 2) + player.Php;
+                }
+            }
         }
-        //Console.WriteLine();
+        Console.WriteLine();
         //플레이어의 남은 체력
-        score = PlayerControl.HP;
+        score = player.Php;
         return score;
     }
 
 
+    
 }
