@@ -16,7 +16,7 @@ public class MonstersControl : MonoBehaviour {
     private Animation animation;
     public static double deadHp = 0;
 
-    public enum AcolyteState
+    public enum MonsterState
     {
         IDLE = 0,
         WALK = 1,
@@ -25,7 +25,7 @@ public class MonstersControl : MonoBehaviour {
         SIZE
     }
 
-    private AcolyteState state = AcolyteState.IDLE;
+    private MonsterState state = MonsterState.IDLE;
 
     // Use this for initialization
     void Start()
@@ -76,7 +76,7 @@ public class MonstersControl : MonoBehaviour {
         if (other.gameObject.tag == "sword")
         {
             //Debug.Log("sword");
-            state = AcolyteState.HIT;
+            state = MonsterState.HIT;
             Instantiate(HitEffect, other.transform.position, transform.rotation);
             //10~50 랜덤 데미지
             //CheckDead(Random.Range(10, 50));
